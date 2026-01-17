@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini AI Chatbot</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="text-center py-8 px-4 bg-gray-900/50 border-b border-gray-700">
+        <div class="flex items-center justify-center gap-3 mb-3">
+            <i class="fas fa-robot text-4xl text-blue-500"></i>
+            <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 text-transparent bg-clip-text">
+                Gemini AI Chatbot
+            </h1>
+        </div>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg">
+            A sleek, modern chatbot interface powered by Google's Gemini AI. Enter your API key and start chatting!
+        </p>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Chat Container -->
+            <div class="lg:col-span-2">
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700 h-[600px] flex flex-col">
+                    <!-- Chat Header -->
+                    <div class="p-6 border-b border-gray-700 flex justify-between items-center">
+                        <h2 class="text-2xl font-bold flex items-center gap-3">
+                            <i class="fas fa-comments text-green-500"></i>
+                            Gemini Chat
+                        </h2>
+                        <div id="api-status" class="flex items-center gap-2 px-4 py-2 rounded-full bg-blue-900/30 text-blue-300">
+                            <i class="fas fa-circle text-xs"></i>
+                            <span>API: Not Connected</span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div id="chat-messages" class="flex-grow p-6 overflow-y-auto">
+                        <!-- Welcome Message -->
+                        <div class="message bot-message mb-6">
+                            <div class="flex items-center gap-2 mb-2">
+                                <i class="fas fa-robot text-green-500"></i>
+                                <span class="font-bold text-green-400">Gemini AI</span>
+                                <span class="text-xs text-gray-400">Just now</span>
+                            </div>
+                            <p class="text-gray-200">
+                                Hello! I'm your Gemini AI assistant. To get started, please enter your Gemini API key in the configuration panel and click "Save & Connect". Once connected, you can ask me anything!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Typing Indicator (Hidden by default) -->
+                    <div id="typing-indicator" class="hidden px-6 pb-4">
+                        <div class="flex items-center gap-2 p-4 bg-gray-700/50 rounded-2xl w-fit">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <span class="ml-2 text-gray-400">Gemini is thinking...</span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="p-6 border-t border-gray-700">
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                id="user-input" 
+                                placeholder="Type your message here..."
+                                class="flex-grow p-4 bg-gray-900/70 border border-gray-600 rounded-xl text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                disabled
+                            >
+                            <button 
+                                id="send-btn"
+                                class="bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold px-8 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled
+                            >
+                                <i class="fas fa-paper-plane"></i>
+                                <span class="hidden sm:inline">Send</span>
+                            </button>
+                        </div>
+                        <div class="flex justify-between items-center mt-3 text-sm text-gray-500">
+                            <div class="flex items-center gap-4">
+                                <button id="clear-chat" class="hover:text-gray-300 transition-colors">
+                                    <i class="fas fa-trash-alt mr-1"></i> Clear Chat
+                                </button>
+                                <button id="example-btn" class="hover:text-gray-300 transition-colors">
+                                    <i class="fas fa-lightbulb mr-1"></i> Example Question
+                                </button>
+                            </div>
+                            <div>
+                                <kbd class="px-2 py-1 bg-gray-900 rounded text-xs">Enter</kbd> to send
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Panel -->
+            <div class="space-y-8">
+                <!-- API Configuration -->
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700 p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-3 text-yellow-400">
+                        <i class="fas fa-key"></i>
+                        API Configuration
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-gray-400 mb-2">Gemini API Key</label>
+                            <div class="flex gap-3">
+                                <input 
+                                    type="password" 
+                                    id="api-key-input" 
+                                    placeholder="Enter your Gemini API key"
+                                    class="flex-grow p-3 bg-gray-900/70 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                <button 
+                                    id="toggle-api-visibility"
+                                    class="px-4 text-gray-400 hover:text-gray-300"
+                                    type="button"
+                                >
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">
+                                Your API key is stored locally in your browser and never sent to our servers.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <button 
+                                id="save-api-btn"
+                                class="bg-gradient-to-r from-green-600 to-green-700 text-white font-semibold p-3 rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-300 flex items-center justify-center gap-2"
+                            >
+                                <i class="fas fa-plug"></i>
+                                Save & Connect
+                            </button>
+                            <button 
+                                id="test-api-btn"
+                                class="bg-gradient-to-r from-purple-600 to-purple-700 text-white font-semibold p-3 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 flex items-center justify-center gap-2"
+                                disabled
+                            >
+                                <i class="fas fa-vial"></i>
+                                Test Connection
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700 p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-3 text-red-400">
+                        <i class="fas fa-info-circle"></i>
+                        Getting Started
+                    </h3>
+                    
+                    <ol class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="bg-blue-900 text-blue-300 rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0">1</span>
+                            <span>Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank" class="text-blue-400 hover:text-blue-300 underline">Google AI Studio</a></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-green-900 text-green-300 rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0">2</span>
+                            <span>Enter your API key above and click "Save & Connect"</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-purple-900 text-purple-300 rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0">3</span>
+                            <span>Start chatting with Gemini AI in the chat interface</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="bg-yellow-900 text-yellow-300 rounded-full w-6 h-6 flex items-center justify-center text-sm flex-shrink-0">4</span>
+                            <span>Use the example button or type your own questions</span>
+                        </li>
+                    </ol>
+
+                    <div class="mt-6 p-4 bg-gray-900/50 rounded-lg">
+                        <h4 class="font-bold text-gray-300 mb-2 flex items-center gap-2">
+                            <i class="fas fa-code"></i>
+                            API Example
+                        </h4>
+                        <code class="text-sm text-gray-400 block">
+                            curl -X POST \<br>
+                            -H "Content-Type: application/json" \<br>
+                            -d '{"contents":[{"parts":[{"text":"Hello"}]}]}' \<br>
+                            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=YOUR_API_KEY"
+                        </code>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-gray-800/50 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700 p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-3 text-blue-400">
+                        <i class="fas fa-bolt"></i>
+                        Quick Actions
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <button 
+                            id="export-chat-btn"
+                            class="bg-gray-700 hover:bg-gray-600 text-gray-200 p-3 rounded-lg transition-colors duration-300 flex flex-col items-center justify-center"
+                        >
+                            <i class="fas fa-download text-xl mb-1"></i>
+                            <span class="text-sm">Export Chat</span>
+                        </button>
+                        <button 
+                            id="change-model-btn"
+                            class="bg-gray-700 hover:bg-gray-600 text-gray-200 p-3 rounded-lg transition-colors duration-300 flex flex-col items-center justify-center"
+                        >
+                            <i class="fas fa-cog text-xl mb-1"></i>
+                            <span class="text-sm">Model: Gemini Pro</span>
+                        </button>
+                        <button 
+                            id="dark-mode-toggle"
+                            class="bg-gray-700 hover:bg-gray-600 text-gray-200 p-3 rounded-lg transition-colors duration-300 flex flex-col items-center justify-center"
+                        >
+                            <i class="fas fa-moon text-xl mb-1"></i>
+                            <span class="text-sm">Dark Mode</span>
+                        </button>
+                        <button 
+                            id="help-btn"
+                            class="bg-gray-700 hover:bg-gray-600 text-gray-200 p-3 rounded-lg transition-colors duration-300 flex flex-col items-center justify-center"
+                        >
+                            <i class="fas fa-question-circle text-xl mb-1"></i>
+                            <span class="text-sm">Help</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 px-4 border-t border-gray-700 text-gray-500 text-sm mt-8">
+        <div class="flex flex-wrap items-center justify-center gap-6 mb-4">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure & Local API Key Storage</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-bolt"></i>
+                <span>Powered by Google Gemini AI</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-code"></i>
+                <span>Open Source</span>
+            </div>
+        </div>
+        <p>© 2024 Gemini Chatbot Interface. All chat data is processed by Google's Gemini API.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

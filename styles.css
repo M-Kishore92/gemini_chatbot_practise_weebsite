@@ -1,0 +1,110 @@
+/* Custom CSS for Gemini Chatbot */
+
+/* Message styling */
+.message {
+    max-width: 85%;
+    padding: 1rem 1.2rem;
+    border-radius: 1rem;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.user-message {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.bot-message {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-right: auto;
+    border-bottom-left-radius: 0.25rem;
+}
+
+/* Typing animation */
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10b981;
+    animation: typing 1.5s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: 0s; }
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+    0%, 60%, 100% { 
+        transform: translateY(0); 
+        opacity: 0.6;
+    }
+    30% { 
+        transform: translateY(-10px); 
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Custom scrollbar */
+#chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chat-messages::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth transitions */
+.message, button, input {
+    transition: all 0.3s ease;
+}
+
+/* Pulse animation for API status */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .message {
+        max-width: 95%;
+    }
+    
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Code block styling */
+code {
+    font-family: 'Courier New', monospace;
+    word-break: break-all;
+}
